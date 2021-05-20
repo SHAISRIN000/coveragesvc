@@ -67,10 +67,10 @@ public class CoverageSvc {
 	    public CoverageDetails getPolicyCoverages(@PathVariable("policy") String policy)
 	    {
 
+		 System.out.println("Entered inside getPolicyCoverages");
 		 System.out.print("The policy number is "+policy);
 		 
 		 
-		 AWSXRay.beginSubsegment("Saving Applicant into DocumentDB");
 		 List<Coverage> applicants=new ArrayList<Coverage>();
 		  String connectionString =
 		  "mongodb://octankdev:octankdev@octankdev1.cluster-cfseldobtmse.us-east-1.docdb.amazonaws.com:27017/?replicaSet=rs0&readPreference=secondaryPreferred";
@@ -82,14 +82,6 @@ public class CoverageSvc {
 		  MongoCollection<Document> numbersCollection =
 		  db.getCollection("coverages");
 
-//		// Retrieve to ensure object was inserted
-//		    FindIterable<Document> iterable = db.getCollection("NameColl").find();
-//		    iterable.forEach(new Block<Document>() {
-//		      @Override
-//		      public void apply(final Document document) {
-//		        System.out.println(document); // See below to convert document back to Employee
-//		      }
-//		    });
 		  BasicDBObject searchQuery = new BasicDBObject();
 		  searchQuery.put("policyNumber",Integer.parseInt(policy));
 		  CoverageDetails coverage=null;
@@ -97,14 +89,14 @@ public class CoverageSvc {
 			  try {
 			  while (cursor.hasNext()) { 
 				  Gson gson = new Gson();
-				  System.out.println("JSON Retrieve is ");
+				  System.out.println("Able to find documents ");
 				   coverage=gson.fromJson(cursor.next().toJson(), CoverageDetails.class);
+				   System.out.println("Coverage Document"+coverage.getPolicyNumber());
 				  
 				//  System.out.println(cursor.next().toJson()); 
 				  } 
 			  }
 			  finally { cursor.close(); }
-			  AWSXRay.endSubsegment();
 		    
 //		 ContactDetails contacts=new ContactDetails(new Address("line2", "West", "MA", "01581"), "test@test.com");
 //		 
