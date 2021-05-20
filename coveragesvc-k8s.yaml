@@ -33,7 +33,7 @@ spec:
   template:
     metadata:
       labels:
-        app: covergesvc
+        app: coveragesvc
     spec:
       containers:
         - name: coveragesvc
