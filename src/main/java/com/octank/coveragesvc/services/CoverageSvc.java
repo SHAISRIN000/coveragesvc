@@ -40,9 +40,11 @@ public class CoverageSvc {
 	public CoverageDetails addCoverages(@PathVariable("policy") String policy, @RequestBody CoverageDetails coverages) {
 		System.out.println("Entered inside Add Coverages");
 		System.out.println("The Policy Number is " + policy);
+		System.out.println("Integer After coversion is "+Integer.getInteger(policy));
 
 	
 		coverages.setPolicyNumber(Integer.getInteger(policy));
+		System.out.println("Get Policy Number"+coverages.getPolicyNumber());
 
 		String connectionString = "mongodb://octankdev:octankdev@octankdev1.cluster-cfseldobtmse.us-east-1.docdb.amazonaws.com:27017/?replicaSet=rs0&readPreference=secondaryPreferred"; // octank.cluster-ct9cduhirshz.us-east-1.docdb.amazonaws.com:27017
 		MongoClientURI clientURI = new MongoClientURI(connectionString);
@@ -63,7 +65,7 @@ public class CoverageSvc {
 	}
 
 	
-	 @GetMapping(value = "/{policy}",produces= "application/json")
+	 @GetMapping(value = "/policy/{policy}",produces= "application/json")
 	    public CoverageDetails getPolicyCoverages(@PathVariable("policy") String policy)
 	    {
 
