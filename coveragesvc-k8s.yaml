@@ -3,7 +3,7 @@ kind: Service
 metadata:
   annotations:
     alb.ingress.kubernetes.io/target-type: ip
-  name: "appsvc"
+  name: "coveragesvc"
   namespace: "octank-dev"
 spec:
   ports:
@@ -12,7 +12,7 @@ spec:
     protocol: TCP
   type: NodePort
   selector:
-    app: "appsvc"
+    app: "coveragesvc"
 
 ---
 apiVersion: apps/v1
@@ -29,14 +29,14 @@ spec:
       maxSurge: 2
   selector:
     matchLabels:
-      app: appsvc
+      app: coveragesvc
   template:
     metadata:
       labels:
-        app: appsvc
+        app: covergesvc
     spec:
       containers:
-        - name: appsvc
+        - name: coveragesvc
           image: CONTAINER_IMAGE
           securityContext:
             privileged: false
