@@ -30,70 +30,89 @@ import com.mongodb.client.MongoDatabase;
 import ch.qos.logback.core.net.SyslogOutputStream;
 import static com.mongodb.client.model.Filters.*;
 
-
-
 @RestController
-@RequestMapping(path ="/coverages")
+@RequestMapping(path = "/coverages")
 @XRayEnabled
 public class CoverageSvc {
 
-	private static final String template = "Hello, %s!";
-	private final AtomicLong counter = new AtomicLong();
-	
-	
-	
-	
-	
-	@PostMapping(path= "/{policy}", consumes = "application/json", produces = "application/json")
-    public CoverageDetails addCoverages(@PathVariable("policy") String policy,@RequestBody CoverageDetails coverages) 
-    {
-	    System.out.println("Entered inside Add Coverages");
-		System.out.println("The Policy Number is "+policy);
-	  
-		Random ran = new Random();
-		int x = ran.nextInt(100) + 100;
-		int policyNumber = ran.nextInt(500000) + 5000;
 
-		System.out.println("The id is "+x);
-		
-		URI location = ServletUriComponentsBuilder.fromCurrentRequest()
-                 .path("/{id}")
-                 .buildAndExpand("101")
-                 .toUri();
+	@PostMapping(path = "/{policy}", consumes = "application/json", produces = "application/json")
+	public CoverageDetails addCoverages(@PathVariable("policy") String policy, @RequestBody CoverageDetails coverages) {
+		System.out.println("Entered inside Add Coverages");
+		System.out.println("The Policy Number is " + policy);
 
-		
-		  
+	
+		coverages.setPolicyNumber(Integer.getInteger(policy));
+
+		String connectionString = "mongodb://octankdev:octankdev@octankdev1.cluster-cfseldobtmse.us-east-1.docdb.amazonaws.com:27017/?replicaSet=rs0&readPreference=secondaryPreferred"; // octank.cluster-ct9cduhirshz.us-east-1.docdb.amazonaws.com:27017
+		MongoClientURI clientURI = new MongoClientURI(connectionString);
+		MongoClient mongoClient = new MongoClient(clientURI);
+
+		MongoDatabase testDB = mongoClient.getDatabase("octankdev");
+		MongoCollection<Document> numbersCollection = testDB.getCollection("coverages");
+		Gson gson = new Gson();
+		String json = gson.toJson(coverages);
+
+		Document doc = Document.parse(json);
+		numbersCollection.insertOne(doc);
+		System.out.println("Inserted Coverages Successfully");
+		System.out.println("Exit  Add Coverages");
+
+		return coverages;
+
+	}
+
+	
+	 @GetMapping(value = "/{policy}",produces= "application/json")
+	    public CoverageDetails getPolicyCoverages(@PathVariable("policy") String policy)
+	    {
+
+		 System.out.print("The policy number is "+policy);
+		 
+		 
+		 AWSXRay.beginSubsegment("Saving Applicant into DocumentDB");
+		 List<Coverage> applicants=new ArrayList<Coverage>();
 		  String connectionString =
-"mongodb://octankdev:octankdev@octankdev1.cluster-cfseldobtmse.us-east-1.docdb.amazonaws.com:27017/?replicaSet=rs0&readPreference=secondaryPreferred";		  //octank.cluster-ct9cduhirshz.us-east-1.docdb.amazonaws.com:27017
+		  "mongodb://octankdev:octankdev@octankdev1.cluster-cfseldobtmse.us-east-1.docdb.amazonaws.com:27017/?replicaSet=rs0&readPreference=secondaryPreferred";
+		  //octank.cluster-ct9cduhirshz.us-east-1.docdb.amazonaws.com:27017
 		  MongoClientURI clientURI = new MongoClientURI(connectionString);
 		  MongoClient mongoClient = new MongoClient(clientURI);
 		  
-		  MongoDatabase testDB = mongoClient.getDatabase("octankdev");
+		  MongoDatabase db = mongoClient.getDatabase("octankdev");
 		  MongoCollection<Document> numbersCollection =
-		  testDB.getCollection("coverages");
-		//Converting a custom Class(Employee) to BasicDBObject
-		  Gson gson = new Gson();
-		    String json = gson.toJson(coverages);
+		  db.getCollection("coverages");
 
-		  Document doc = Document.parse(json);
-	//	  BasicDBObject obj = (BasicDBObject)JSON.parse(gson.toJson(applicant));
-		  numbersCollection.insertOne(doc);
-		  System.out.println("Inserted Coverages Successfully");
-		  
-//		  Document doc = new Document("id", applicant.getId()).append("value", applicant);
-//		  numbersCollection.insertOne(doc);
-//		  
-//		  MongoCursor<Document> cursor = numbersCollection.find().iterator(); try {
-//		  while (cursor.hasNext()) { System.out.println(cursor.next().toJson()); } }
-//		  finally { cursor.close(); }
-		  System.out.println("Exit  Add Coverages");
-			
-return coverages;
+//		// Retrieve to ensure object was inserted
+//		    FindIterable<Document> iterable = db.getCollection("NameColl").find();
+//		    iterable.forEach(new Block<Document>() {
+//		      @Override
+//		      public void apply(final Document document) {
+//		        System.out.println(document); // See below to convert document back to Employee
+//		      }
+//		    });
+		  BasicDBObject searchQuery = new BasicDBObject();
+		  searchQuery.put("policyNumber",Integer.parseInt(policy));
+		  CoverageDetails coverage=null;
+		  MongoCursor<Document> cursor = numbersCollection.find(eq("policyNumber", Integer.parseInt(policy))).iterator();
+			  try {
+			  while (cursor.hasNext()) { 
+				  Gson gson = new Gson();
+				  System.out.println("JSON Retrieve is ");
+				   coverage=gson.fromJson(cursor.next().toJson(), CoverageDetails.class);
+				  
+				//  System.out.println(cursor.next().toJson()); 
+				  } 
+			  }
+			  finally { cursor.close(); }
+			  AWSXRay.endSubsegment();
+		    
+//		 ContactDetails contacts=new ContactDetails(new Address("line2", "West", "MA", "01581"), "test@test.com");
+//		 
+//		    
+//    Applicant applicant=new Applicant(101,"ssf","sdfsdf",contacts,false);
+    return coverage;
+	    }
 	 
-
-
-	}
-	
 	
 	
 }
