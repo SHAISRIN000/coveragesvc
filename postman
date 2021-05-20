@@ -1,0 +1,20 @@
+curl -X POST \
+  http://localhost:8080/applicants/ \
+  -H 'cache-control: no-cache' \
+  -H 'content-type: application/json' \
+  -H 'postman-token: a00fde8d-b830-9a49-7f94-89840085c82e' \
+  -d '{
+    "id": 101,
+    "firstName": "ssf",
+    "lastName": "sdfsdf",
+    "contacts": {
+        "address": {
+            "addressLine": "line2",
+            "city": "West",
+            "state": "MA",
+            "postalCode": "01581"
+        },
+        "email": "test@test.com"
+    },
+    "paperlessBilling": false
+}'
