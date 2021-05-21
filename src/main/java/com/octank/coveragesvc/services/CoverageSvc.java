@@ -73,7 +73,7 @@ public class CoverageSvc {
 	    System.out.println(className+"   "+"Entered inside getPolicyCoverages");
 	    System.out.println(className+"   "+"The policy number is "+policy);
 		 
-	//      AWSXRay.beginSubsegment("Fetching Coverages from DocumentDB");
+	//      AWSXRay.beginSubsegment("Fetching Coverages from DocumentDB ");
 		 List<Coverage> applicants=new ArrayList<Coverage>();
 		  String connectionString =
 		  "mongodb://octankdev:octankdev@octankdev1.cluster-cfseldobtmse.us-east-1.docdb.amazonaws.com:27017/?replicaSet=rs0&readPreference=secondaryPreferred";
