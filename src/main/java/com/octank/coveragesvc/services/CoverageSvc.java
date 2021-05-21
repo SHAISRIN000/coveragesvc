@@ -38,14 +38,13 @@ public class CoverageSvc {
 
 	@PostMapping(path = "/{policy}", consumes = "application/json", produces = "application/json")
 	public CoverageDetails addCoverages(@PathVariable("policy") String policy, @RequestBody CoverageDetails coverages) {
-		System.out.println("Entered inside Add Coverages");
-		System.out.println("The Policy Number is " + policy);
-		System.out.println("Integer After coversion is "+Integer.valueOf(policy));
-
+        String className=this.getClass().getName();
+		System.out.println(className+"Entered inside addCoverages");
+		System.out.println(className+"The Policy Number is " + policy);
 	
 		coverages.setPolicyNumber(Integer.valueOf(policy));
-		System.out.println("Get Policy Number"+coverages.getPolicyNumber());
-
+		System.out.println(className+"Get Policy Number"+coverages.getPolicyNumber());
+		AWSXRay.beginSubsegment("Saving Coverages into DocumentDB");
 		String connectionString = "mongodb://octankdev:octankdev@octankdev1.cluster-cfseldobtmse.us-east-1.docdb.amazonaws.com:27017/?replicaSet=rs0&readPreference=secondaryPreferred"; // octank.cluster-ct9cduhirshz.us-east-1.docdb.amazonaws.com:27017
 		MongoClientURI clientURI = new MongoClientURI(connectionString);
 		MongoClient mongoClient = new MongoClient(clientURI);
@@ -57,8 +56,9 @@ public class CoverageSvc {
 
 		Document doc = Document.parse(json);
 		numbersCollection.insertOne(doc);
-		System.out.println("Inserted Coverages Successfully");
-		System.out.println("Exit  Add Coverages");
+		AWSXRay.endSegment();
+		System.out.println(className+"Inserted Coverages Successfully");
+		System.out.println(className+"Exit  Add Coverages");
 		mongoClient.close();
 		return coverages;
 
@@ -67,12 +67,13 @@ public class CoverageSvc {
 	
 	 @GetMapping(value = "/policy/{policy}",produces= "application/json")
 	    public CoverageDetails getPolicyCoverages(@PathVariable("policy") String policy)
-	    {
+	    {       String className=this.getClass().getName();
 
-		 System.out.println("Entered inside getPolicyCoverages");
-		 System.out.print("The policy number is "+policy);
+
+	    System.out.println(className+"Entered inside getPolicyCoverages");
+	    System.out.println(className+"The policy number is "+policy);
 		 
-		 
+	    AWSXRay.beginSubsegment("Fetching Coverages from DocumentDB");
 		 List<Coverage> applicants=new ArrayList<Coverage>();
 		  String connectionString =
 		  "mongodb://octankdev:octankdev@octankdev1.cluster-cfseldobtmse.us-east-1.docdb.amazonaws.com:27017/?replicaSet=rs0&readPreference=secondaryPreferred";
@@ -99,11 +100,13 @@ public class CoverageSvc {
 				  } 
 			  }
 			  finally { cursor.close(); }
-		    
+				System.out.println(className+"Fetched Coverages Successfully");
+				AWSXRay.endSegment();
 //		 ContactDetails contacts=new ContactDetails(new Address("line2", "West", "MA", "01581"), "test@test.com");
 //		 
-//		    
+//		    AWSXRay.endSegment();
 //    Applicant applicant=new Applicant(101,"ssf","sdfsdf",contacts,false);
+				System.out.println(className+"Exit from getPolicyCoveages");
     return coverage;
 	    }
 	 
