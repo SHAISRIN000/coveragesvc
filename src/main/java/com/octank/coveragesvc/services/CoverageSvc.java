@@ -44,7 +44,7 @@ public class CoverageSvc {
 	
 		coverages.setPolicyNumber(Integer.valueOf(policy));
 		System.out.println(className+"   "+"Get Policy Number"+coverages.getPolicyNumber());
-		AWSXRay.beginSubsegment("Saving Coverages into DocumentDB");
+	//	AWSXRay.beginSubsegment("Saving Coverages into DocumentDB");
 		String connectionString = "mongodb://octankdev:octankdev@octankdev1.cluster-cfseldobtmse.us-east-1.docdb.amazonaws.com:27017/?replicaSet=rs0&readPreference=secondaryPreferred"; // octank.cluster-ct9cduhirshz.us-east-1.docdb.amazonaws.com:27017
 		MongoClientURI clientURI = new MongoClientURI(connectionString);
 		MongoClient mongoClient = new MongoClient(clientURI);
@@ -56,7 +56,7 @@ public class CoverageSvc {
 
 		Document doc = Document.parse(json);
 		numbersCollection.insertOne(doc);
-		AWSXRay.endSegment();
+	//	AWSXRay.endSegment();
 		System.out.println(className+"   "+"Inserted Coverages Successfully");
 		System.out.println(className+"   "+"Exit  Add Coverages");
 		mongoClient.close();
