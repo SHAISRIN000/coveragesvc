@@ -8,6 +8,7 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import org.bson.Document;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -30,6 +31,7 @@ import com.mongodb.client.MongoDatabase;
 import ch.qos.logback.core.net.SyslogOutputStream;
 import static com.mongodb.client.model.Filters.*;
 
+@CrossOrigin(maxAge = 3600)
 @RestController
 @RequestMapping(path = "/coverages")
 @XRayEnabled
