@@ -41,7 +41,7 @@ public class CoverageSvc {
 
 	
 	
-	@RequestMapping(value="/{policy}", method = RequestMethod.OPTIONS)
+	@RequestMapping(value="/policy/{policy}", method = RequestMethod.OPTIONS)
     ResponseEntity<?> collectionOptionds() 
     {
          return ResponseEntity
@@ -53,7 +53,7 @@ public class CoverageSvc {
 	
 
 	@CrossOrigin(origins = "*")
-	@PostMapping(path = "/{policy}", consumes = "application/json", produces = "application/json")
+	@PostMapping(path = "/policy/{policy}", consumes = "application/json", produces = "application/json")
 	public CoverageDetails addCoverages(@PathVariable("policy") String policy, @RequestBody CoverageDetails coverages) {
         String className=this.getClass().getName();
 		System.out.println(className+"   "+"Entered inside addCoverages");
