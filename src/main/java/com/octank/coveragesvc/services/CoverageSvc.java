@@ -38,6 +38,7 @@ import static com.mongodb.client.model.Filters.*;
 public class CoverageSvc {
 
 
+	@CrossOrigin(origins = "*")
 	@PostMapping(path = "/{policy}", consumes = "application/json", produces = "application/json")
 	public CoverageDetails addCoverages(@PathVariable("policy") String policy, @RequestBody CoverageDetails coverages) {
         String className=this.getClass().getName();
@@ -67,7 +68,7 @@ public class CoverageSvc {
 
 	}
 
-	
+	@CrossOrigin(origins = "*")
 	 @GetMapping(value = "/policy/{policy}",produces= "application/json")
 	    public CoverageDetails getPolicyCoverages(@PathVariable("policy") String policy)
 	    {       String className=this.getClass().getName();
