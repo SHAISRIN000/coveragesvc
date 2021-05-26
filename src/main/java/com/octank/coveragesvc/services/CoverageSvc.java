@@ -31,7 +31,7 @@ import com.mongodb.client.MongoDatabase;
 import ch.qos.logback.core.net.SyslogOutputStream;
 import static com.mongodb.client.model.Filters.*;
 
-@CrossOrigin(maxAge = 3600)
+@CrossOrigin
 @RestController
 @RequestMapping(path = "/coverages")
 @XRayEnabled
