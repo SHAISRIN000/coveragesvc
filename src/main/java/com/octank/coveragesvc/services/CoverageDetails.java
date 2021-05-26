@@ -8,7 +8,18 @@ public class CoverageDetails {
 	List<Coverage> coverages=new ArrayList<>();
 	
     private Integer policyNumber;
+    
+    private String message;
+    
 
+
+	public String getMessage() {
+		return message;
+	}
+
+	public void setMessage(String message) {
+		this.message = message;
+	}
 
 	public Integer getPolicyNumber() {
 		return policyNumber;
