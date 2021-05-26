@@ -33,7 +33,6 @@ import com.mongodb.client.MongoDatabase;
 import ch.qos.logback.core.net.SyslogOutputStream;
 import static com.mongodb.client.model.Filters.*;
 
-@CrossOrigin
 @RestController
 @RequestMapping(path = "/coverages")
 @XRayEnabled
@@ -41,9 +40,10 @@ public class CoverageSvc {
 
 	
 	
-	@RequestMapping(value="/policy/{policy}", method = RequestMethod.OPTIONS)
+	@RequestMapping(value="/{policy}", method = RequestMethod.OPTIONS)
     ResponseEntity<?> collectionOptionds() 
     {
+		System.out.println("Entered inside Options******************");
          return ResponseEntity
                  .ok()
                  .allow(HttpMethod.GET, HttpMethod.POST, HttpMethod.OPTIONS)
@@ -83,7 +83,7 @@ public class CoverageSvc {
 	}
 
 	@CrossOrigin(origins = "*")
-	 @GetMapping(value = "/policy/{policy}",produces= "application/json")
+	 @GetMapping(value = "/{policy}",produces= "application/json")
 	    public CoverageDetails getPolicyCoverages(@PathVariable("policy") String policy)
 	    {       String className=this.getClass().getName();
 
