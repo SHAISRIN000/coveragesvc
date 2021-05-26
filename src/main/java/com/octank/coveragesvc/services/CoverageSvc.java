@@ -7,6 +7,7 @@ import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
 
 import org.bson.Document;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -37,6 +39,18 @@ import static com.mongodb.client.model.Filters.*;
 @XRayEnabled
 public class CoverageSvc {
 
+	
+	
+	@RequestMapping(value="/{policy}", method = RequestMethod.OPTIONS)
+    ResponseEntity<?> collectionOptionds() 
+    {
+         return ResponseEntity
+                 .ok()
+                 .allow(HttpMethod.GET, HttpMethod.POST, HttpMethod.OPTIONS)
+                 .build();
+    }
+
+	
 
 	@CrossOrigin(origins = "*")
 	@PostMapping(path = "/{policy}", consumes = "application/json", produces = "application/json")
