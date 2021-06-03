@@ -77,7 +77,7 @@ public class CoverageSvc {
 		System.out.println(className+"   "+"Inserted Coverages Successfully");
 		System.out.println(className+"   "+"Exit  Add Coverages");
 		mongoClient.close();
-		coverages.setMessage("Inserted Coverages Octank Insurance Successfully");
+		coverages.setMessage("Inserted Coverages Successfully");
 		return coverages;
 
 	}
